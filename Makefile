@@ -1,12 +1,20 @@
-.phony: build start
+.phony: build start run stop
+
+PORT=50713
+FILEPATH="/tmp/decoded-docs"
+NAME="document-decoder"
+IMAGE_NAME="mmueller:document-decoder"
 
 build:
-	docker build -t mmueller:document-decoder .
+	docker build -t ${IMAGE_NAME} .
 
 run:
-	docker run -d --restart unless-stopped -p 50713:5000 -v /tmp/decoded-docs:/files --name=document-decoder mmueller:document-decoder
+	docker run -d --restart unless-stopped -p ${PORT}:5000 -v ${FILEPATH}:/files --name=${NAME} ${IMAGE_NAME}
 
 start:
-	docker start document-decoder
+	docker start ${NAME}
+
+stop:
+	docker stop ${NAME}
 
 all: build run
